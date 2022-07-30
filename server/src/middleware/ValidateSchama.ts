@@ -2,7 +2,7 @@ import Joi, { ObjectSchema } from "joi";
 import { NextFunction, Response, Request } from "express";
 import Loging from "../library/Loging";
 import { Schema } from "mongoose";
-import { IAuthor } from "../models/Author";
+import { IAuthor } from "../models/Token";
 
 export const ValidateSchema = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {

@@ -3,7 +3,8 @@ import http from "http";
 import mongoose from "mongoose";
 import { config } from "./config/config";
 import Loging from "./library/Loging";
-import authorRoutes from './routes/Author';
+import newsRoutes from './routes/News';
+import userRoutes from './routes/User';
 
 const router = express();
 
@@ -48,7 +49,8 @@ const startServer = () => {
     });
 
 
-    router.use('/authors', authorRoutes);
+    router.use('/api/news', newsRoutes);
+    router.use('/api/user', userRoutes);
 
     router.use((req, res, next) => {
         const error = new Error('notFound');
