@@ -1,5 +1,4 @@
 import express from "express";
-import controller from "../controllers/user-controller"
 import { Schemas, ValidateSchema } from "../middleware/ValidateSchama";
 
 const router = express.Router();

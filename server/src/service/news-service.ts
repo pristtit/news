@@ -1,4 +1,4 @@
-import NewsSchema from "../models/News";
+import NewsSchema, { INewsModel } from "../models/News";
 
 class NewsService {
     async create(title: String, body: String) {
@@ -6,7 +6,24 @@ class NewsService {
     }
 
     async getAll() {
-        d
+        return await NewsSchema.find()
+
+    }
+
+    async getById(newsId: String) {
+        return await NewsSchema.findById(newsId)
+    }
+    
+    async updateNews(newsId: String,body: INewsModel) {
+        const news = await NewsSchema.findById(newsId)
+        if (news) {
+            news.set({ body }).save()
+            return news;
+        }
+    }
+    
+    async deleteNews(newsId: String) {
+        return await NewsSchema.findByIdAndDelete(newsId)
     }
 }
 
