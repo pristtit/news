@@ -1,29 +1,25 @@
 <template>
   <div>
-    <h2>{{ author?.authors.map(item => item.name) }}</h2>
-    <form @submit.prevent="onSubmit">
-      <input v-model="name" type="text" placeholder="name">
-      <button @click="creteAuthor" >create</button>
-      <input v-model="id" type="text" placeholder="name">
-      <button @click="delAuthor" >del</button>
-    </form> 
+    <appHeader/>
+    <appBody/>
   </div>
 </template>
 
 <script>
+import appHeader from '@/components/app-header/app-header.vue'
+import appBody from '@/components/app-body/app-body.vue'
 
 export default {
   name: 'App',
+
+  components: {
+    appHeader: appHeader,
+    appBody: appBody
+  },
+
   data() {
     return {
-      author: null,
-      name: null,
-      id: null,
     }
-  },
-  async created() {
-    let author = await fetch('http://localhost:1337/authors/get/');
-    this.author = await author.json();
   },
 
   methods: {
@@ -59,6 +55,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
