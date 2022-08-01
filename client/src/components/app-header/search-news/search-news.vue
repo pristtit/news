@@ -1,6 +1,6 @@
 <template>
   <form>
-    <input type="text">
+    <input type="text" class="serch-news__input">
     <button>Найти</button>
   </form>
 </template>
@@ -12,5 +12,8 @@ export default {
 </script>
 
 <style>
-
+.serch-news__input {
+  flex-grow: 1;
+  width: 60%;
+}
 </style>

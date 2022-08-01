@@ -1,8 +1,8 @@
 <template>
   <div class="app-header">
-    <accountControl/>
-    <btnAddNews/>
-    <searchNews/>
+    <btnAddNews class="btn-add-news"/>
+    <searchNews class="search__news"/>
+    <accountControl class="account__control"/>
   </div>
 </template>
 
@@ -24,7 +24,23 @@ export default {
 <style scoped>
 
 .app-header {
-    display: flex;
-    margin: 40px 20px;
+  margin: 5px 0;
+  display: flex;
+  gap: 5px 10px;
+  justify-content: space-between ;
+  flex-wrap: wrap-reverse;
+}
+
+.search__news {
+  display: flex;
+  flex-grow: 100;
+}
+.account__control {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.btn-add-news {
+  flex-grow: 1;
 }
 </style>
