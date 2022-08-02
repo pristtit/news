@@ -24,7 +24,7 @@ class NewsController {
     
     async getById(req: Request, res: Response, next: NextFunction) {
         try {
-            const newsId = req.params.newsId;
+            const newsId = req.params.id;
             const news = await newsService.getById(newsId)
             return news ? res.status(200).json(news) : res.status(404).json({ message: 'Новость не найдена' })
         } catch (error) {
@@ -34,7 +34,7 @@ class NewsController {
     
     async updateNews(req: Request, res: Response, next: NextFunction) {
         try {
-            const newsId = req.params.newsId;
+            const newsId = req.params.id;
             const news = await newsService.updateNews(newsId, req.body)
             return news ? res.status(200).json('Новость успешно изменена') : res.status(404).json({ message: 'Новость не найдена' })
         } catch (error) {
@@ -44,7 +44,7 @@ class NewsController {
     
     async deleteNews(req: Request, res: Response, next: NextFunction) {
         try {
-            const newsId = req.params.newsId;
+            const newsId = req.params.id;
             const news = await newsService.deleteNews(newsId)
             return news ? res.status(200).json('Новость успешно удалена') : res.status(404).json({ message: 'Новость не найдена' })
         } catch (error) {

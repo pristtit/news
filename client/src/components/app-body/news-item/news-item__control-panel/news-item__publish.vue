@@ -1,5 +1,5 @@
 <template>
-  <button @click="visiblOn">Создать</button>
+  <button @click="createNews()">Опубликовать</button>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ import { newsStore } from '@/store/news'
 export default {
 
     methods: {
-      ...mapActions(newsStore, {visiblOn: 'visiblOn'}),
+      ...mapActions(newsStore, {createNews: 'createNews'}),
     }
 }
 </script>

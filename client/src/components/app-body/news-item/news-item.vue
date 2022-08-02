@@ -1,20 +1,39 @@
 <template>
     <div class="news-item">
-        <newsItemTitle class="news-item__title"/>
-        <newsItemBody class="news-item__body"/>
-        <newsItemControlPanel class="news-item_control-panel"/>
+        <newsItemBody
+            class="news-item__title"
+            :item="item"
+            :edit="edit"
+        />
+        <newsItemControlPanel
+            class="news-item_control-panel"
+            :edit="edit"
+        />
     </div>
 </template>
 
 <script>
-import newsItemTitle from '@/components/app-body/news-item/news-item__title/news-item__title.vue'
-import newsItemBody from '@/components/app-body/news-item/news-item__body/news-item__body.vue'
+import newsItemBody from '@/components/app-body/news-item/news-item__title/news-item__title.vue'
 import newsItemControlPanel from '@/components/app-body/news-item/news-item__control-panel/news-item_control-panel.vue'
 
 export default {
 
+    data() {
+        return {
+        news: this.item || {title: null, body: null},
+        }
+    },
+
+    props: {
+        item: {
+            type: Object,
+        },
+        edit: {
+            type: Boolean,
+        }
+    },
+
     components: {
-        newsItemTitle: newsItemTitle,
         newsItemBody: newsItemBody,
         newsItemControlPanel: newsItemControlPanel,
     }

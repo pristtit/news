@@ -11,6 +11,9 @@ const NewsSchema: Schema = new Schema(
     {
         title: { type: String, required: true },
         body: { type: String, required: true },
+    },
+    {
+        versionKey: false
     }
 );
 
