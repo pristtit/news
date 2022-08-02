@@ -2,13 +2,13 @@
   <div class="app-body">
     <newsItem
       v-if="createVisible"
-      :edit="true"
+      @refresh="(newsUp) => addNewsPinia(newsUp)"
     />
     <newsItem
-      v-for="item of news"
+      v-for="item of ne"
       :key="item._id"
       :item="item"
-      :edit="false"
+      @refresh="(newsUp) => addNewsPinia(newsUp)"
       class="news-item"/>
   </div>
 </template>
@@ -17,6 +17,7 @@
 import newsItem from '@/components/app-body/news-item/news-item.vue'
 import { mapState } from "pinia";
 import { newsStore } from '@/store/news'
+import { mapActions } from "pinia";
 
 export default {
 
@@ -26,17 +27,21 @@ export default {
 
     data() {
       return {
-        news: null,
+        news: this.ne,
       }
     },
 
     computed: {
-    ...mapState(newsStore, {createVisible: 'createVisible'}),
+      ...mapState(newsStore, {createVisible:'createVisible', ne:'news'}),
+    },
+
+    methods: {
+    ...mapActions(newsStore, ['addNewsPinia']),
     },
 
     async created() {
       const response = await fetch('http://localhost:1337/api/news/getAll');
-      this.news = await response.json();
+      this.addNewsPinia(await response.json());
     }
 
 }

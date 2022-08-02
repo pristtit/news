@@ -17,23 +17,8 @@ export default {
     appBody: appBody
   },
 
-  data() {
-    return {
-    }
-  },
 
   methods: {
-    async creteAuthor() {
-      await fetch('http://localhost:1337/authors/create/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: this.name
-        })
-      });
-    },
 
     async delAuthor() {
       await fetch(`http://localhost:1337/authors/delete/${ this.id }`, {

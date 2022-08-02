@@ -17,7 +17,7 @@ class NewsService {
     async updateNews(newsId: String,body: INewsModel) {
         const news = await NewsSchema.findById(newsId)
         if (news) {
-            news.set(body).save()
+            await news.set(body).save()
             return news;
         }
     }

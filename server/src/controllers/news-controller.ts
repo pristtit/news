@@ -7,7 +7,8 @@ class NewsController {
         try {
             const { title, body } = req.body;
             await newsService.create(title, body)
-            return res.status(201).json(`Новость ${title} успешно добавлена`)
+            const allNews = await newsService.getAll()
+            return res.status(201).json(allNews.reverse())
         } catch (error) {
             return res.status(500).json(error)
         }
@@ -16,7 +17,7 @@ class NewsController {
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const allNews = await newsService.getAll()
-            return res.status(201).json(allNews)
+            return res.status(201).json(allNews.reverse())
         } catch (error) {
             return res.status(500).json(error)
         }
@@ -36,7 +37,8 @@ class NewsController {
         try {
             const newsId = req.params.id;
             const news = await newsService.updateNews(newsId, req.body)
-            return news ? res.status(200).json('Новость успешно изменена') : res.status(404).json({ message: 'Новость не найдена' })
+            const allNews = await newsService.getAll()
+            return news ? res.status(201).json(allNews.reverse()) : res.status(404).json({ message: 'Новость не найдена' })
         } catch (error) {
             return res.status(500).json(error)
         }
@@ -46,7 +48,8 @@ class NewsController {
         try {
             const newsId = req.params.id;
             const news = await newsService.deleteNews(newsId)
-            return news ? res.status(200).json('Новость успешно удалена') : res.status(404).json({ message: 'Новость не найдена' })
+            const allNews = await newsService.getAll()
+            return news ? res.status(200).json(allNews.reverse()) : res.status(404).json({ message: 'Новость не найдена' })
         } catch (error) {
             return res.status(500).json(error)
         }
