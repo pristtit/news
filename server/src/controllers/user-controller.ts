@@ -1,66 +1,26 @@
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
-import Author from "../models/Token";
+import User from "../models/User";
+import bcrypt from 'bcryptjs';
+import authService from "../service/user-service"
+import Loging from "../library/Loging";
 
-
-const cretaeAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const { name } = req.body;
-
-    const author = new Author({
-        _id: new mongoose.Types.ObjectId(),
-        name
-    });
-
-    return author
-        .save()
-        .then((author) => res.status(201).json({ author }))
-        .catch((error) => res.status(500).json({ error }))
-};
-
-const readAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const authorId = req.params.authorId;
-
-    return Author.findById(authorId)
-        .then((author) => {
-            author ? res.status(200).json({ author }) : res.status(404).json({ message: 'NotFoound' })
-        })
-        .catch(error => res.status(500).json({ error }));
-};
-
-const readAll = (req: Request, res: Response, next: NextFunction) => {
-    return Author.find()
-        .then((authors) => res.status(200).json({ authors }))
-        .catch(error => res.status(500).json({ error }));
-};
-
-const updateAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const authorId = req.params.authorId;
-
-    return Author.findById(authorId)
-        .then((author) => {
-            if(author) {
-                author.set(req.body)
-
-                return author
-                .save()
-                .then((author) => res.status(201).json({ author }))
-                .catch((error) => res.status(500).json({ error }))
-            } else {
-                res.status(404).json({ message: 'NotFoound' })
+class authController {
+    async registration(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userName, password } = req.body;
+            const isUser = await User.findOne({userName});
+            if (isUser) {
+                return res.status(400).json({message: 'Пользователь с таким именем уже зарегестрирован'})
             }
-        })
-        .catch(error => res.status(500).json({ error }));
-};
+            const hashPassword = bcrypt.hashSync(password, 10);
+            await authService.registration(userName, hashPassword);
+            res.status(200).json('успешно');
+        } catch (error) {
+            res.status(400).json('error');
+        }
+    }
+}
 
-const deleteAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const authorId = req.params.authorId;
 
-    return Author.findByIdAndDelete(authorId)
-        .then((author) => (author ?
-            res.status(201).json({ message: 'deleted' }) :
-            res.status(404).json({ message: 'NotFound' })
-        ))
-        .catch((error) => res.status(500).json({ error }))
-};
-
-export default { cretaeAuthor, readAuthor, readAll, updateAuthor, deleteAuthor }
+export default new authController();

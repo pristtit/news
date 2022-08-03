@@ -21,11 +21,11 @@ mongoose
 
 const startServer = () => {
     router.use((req, res, next) => {
-        Loging.info(`Outgoing -> Metod: [${req.method}] - URL: [${req.url}]` +
+        Loging.info(`Incoming -> Metod: [${req.method}] - URL: [${req.url}]` +
         `- IP: [${req.socket.remoteAddress}]`);
 
         res.on('finish', () => {
-            Loging.info(`Incoming -> Metod: [${req.method}] - URL: [${req.url}]` +
+            Loging.info(`Outgoing -> Metod: [${req.method}] - URL: [${req.url}]` +
             `- IP: [${req.socket.remoteAddress}] Status: [${res.statusCode}]`);
         })
 
@@ -50,7 +50,7 @@ const startServer = () => {
 
 
     router.use('/api/news', newsRoutes);
-    router.use('/api/user', userRoutes);
+    router.use('/api/users', userRoutes);
 
     router.use((req, res, next) => {
         const error = new Error('notFound');

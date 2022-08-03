@@ -1,9 +1,10 @@
 import express from "express";
+import authController from "../controllers/user-controller"
 import { Schemas, ValidateSchema } from "../middleware/ValidateSchama";
 
 const router = express.Router();
 
-router.post('/registration', );
+router.post('/registration', authController.registration);
 router.post('/login', );
 router.post('/logout', );
 router.get('/refresh', );
