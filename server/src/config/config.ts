@@ -11,6 +11,8 @@ const SERVER_PORT = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 
 const JWT_SECRET_ACCESS_KEY = process.env.JWT_SECRET_KEY || 'accessanykey'
 const JWT_SECRET_REFRESH_KEY = process.env.JWT_SECRET_KEY || 'refreshanykey'
 
+const COOKIES_SECRET_KEY = process.env.COOKIES_SECRET_KEY || 'AJHDUYAVCBNMQW8YE2863RG17G'
+
 export const config = {
     mongo: {
         url: MONGO_URL
@@ -21,5 +23,8 @@ export const config = {
     jwt: {
         secretAccessKey: JWT_SECRET_ACCESS_KEY,
         secretRefreshKey: JWT_SECRET_REFRESH_KEY
+    },
+    cookies: {
+        secretKey: COOKIES_SECRET_KEY
     }
 }

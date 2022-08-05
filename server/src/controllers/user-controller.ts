@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 import bcrypt from 'bcryptjs';
 import authService from "../service/user-service"
-import Loging from "../library/Loging";
 import { config } from "../config/config";
+import Cookies from "cookies";
+import Loging from "../library/Loging";
 
 const genetareAccesToken = (id: String) => {
     const payload = {
@@ -17,19 +18,16 @@ class authController {
     async registration(req: Request, res: Response, next: NextFunction) {
         try {
             const { userName, password } = req.body;
+            
             const user = await User.findOne({ userName });
             if (user) {
                 return res.status(400).json({ message: 'Пользователь с таким именем уже зарегестрирован' })
             }
 
-            const salt = bcrypt.genSaltSync(10);
-            Loging.info(salt);
-            const hashPassword = bcrypt.hashSync(password, salt);
-
-            await authService.registration(userName, hashPassword);
+            await authService.registration(userName, password);
             res.status(200).json('успешно');
         } catch (error) {
-            res.status(400).json('error');
+            res.status(400).json(error);
         }
     }
 
@@ -46,10 +44,37 @@ class authController {
                 res.status(400).json({ message: 'Не верный пароль' })
             }
             const token = genetareAccesToken(user._id);
+            // const cookies = new Cookies(req, res);
+            // Loging.info(cookies.get('token'));
+            // cookies.set('token', token)
 
-            return res.status(200).json({ token })
+            // Loging.info(req.headers['cookie']);
+            // res.writeHead(200, { 'Set-Cookie': `token=${token}` });
+            // res.end();
+
+            Loging.info(req.cookies);
+            res.cookie("token", "12345ABCDE",  {httpOnly: true});
+            res.status(200).json('token');
         } catch (error) {
             res.status(500).json('error');
+        }
+    }
+
+    async logout(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userName, password } = req.body;
+            const user = await User.findOne({ userName });
+            if (user) {
+                return res.status(400).json({ message: 'Пользователь с таким именем уже зарегестрирован' })
+            }
+
+            const salt = bcrypt.genSaltSync(10);
+            const hashPassword = bcrypt.hashSync(password, salt);
+
+            await authService.registration(userName, hashPassword);
+            res.status(200).json('успешно');
+        } catch (error) {
+            res.status(400).json('error');
         }
     }
 }

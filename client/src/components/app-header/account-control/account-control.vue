@@ -1,20 +1,32 @@
 <template>
   <div>
-    <login/>
-    <exit/>
+  <button @click="currentType = 2">Войти</button>
+  <button @click="currentType = 1">регистрация</button>
+  <ModalWindow :modalOn="modalOn" @closeModal="currentType = 0" v-if="currentType"/>
+  <button>выйти</button>
   </div>
 </template>
 
 <script>
-import login from '@/components/app-header/account-control/account-control__login.vue'
-import exit from '@/components/app-header/account-control/account-control__exit.vue'
+import ModalWindow from '@/components/app-header/account-control/modal-window.vue'
+import { authStore } from '@/store/auth'
+import { mapWritableState } from "pinia";
 
 export default {
 
-    components: {
-        login: login,
-        exit: exit,
+  components: {
+    ModalWindow: ModalWindow
+  },
+
+  data() {
+    return {
+      modalOn: false
     }
+  },
+
+  computed: {
+    ...mapWritableState(authStore, ['currentType']),
+  },
 }
 </script>
 

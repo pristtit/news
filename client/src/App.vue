@@ -16,20 +16,6 @@ export default {
     appHeader: appHeader,
     appBody: appBody
   },
-
-
-  methods: {
-
-    async delAuthor() {
-      await fetch(`http://localhost:1337/authors/delete/${ this.id }`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      this.id = '';
-    },
-  },
 }
 </script>
 

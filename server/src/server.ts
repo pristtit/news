@@ -5,6 +5,7 @@ import { config } from "./config/config";
 import Loging from "./library/Loging";
 import newsRoutes from './routes/News';
 import userRoutes from './routes/User';
+import CookiePars from "cookie-parser";
 
 const router = express();
 
@@ -34,6 +35,8 @@ const startServer = () => {
 
     router.use(express.urlencoded({extended: true}));
     router.use(express.json());
+    router.use(CookiePars());
+
 
     router.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
@@ -47,7 +50,6 @@ const startServer = () => {
 
         next();
     });
-
 
     router.use('/api/news', newsRoutes);
     router.use('/api/users', userRoutes);

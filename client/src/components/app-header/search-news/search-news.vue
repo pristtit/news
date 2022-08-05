@@ -1,13 +1,15 @@
 <template>
-  <form @submit.prevent>
+<div>
+  <form class="serch-news__form" @submit.prevent>
     <input
       type="text"
       class="serch-news__input"
       v-model="id"
     >
-    <button @click="findNews(id); id=''">Найти</button>
-    <button @click="ShowAllNews">Все</button>
+    <button style="flex-grow: 1" @click="findNews(id); id=''">Найти</button>
   </form>
+  <button style="flex-grow: 1" @click="ShowAllNews">Все</button>
+</div>
 </template>
 
 <script>
@@ -35,7 +37,13 @@ export default {
 
 <style>
 .serch-news__input {
-  flex-grow: 1;
-  width: 60%;
+  flex-grow: 10;
+  width: 70%;
+}
+
+.serch-news__form {
+  flex-grow: 10;
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

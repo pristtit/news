@@ -2,6 +2,7 @@ import Joi, { ObjectSchema } from "joi";
 import { NextFunction, Response, Request } from "express";
 import Loging from "../library/Loging";
 import { IUser } from "../models/User";
+import { INews } from "../models/News";
 
 export const ValidateSchema = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +30,21 @@ export const Schemas = {
             .string()
             .min(8)
             .max(20)
+            .required(),
+    }),
+    
+    news: Joi.object<INews>({
+        title: Joi
+            .string()
+            .alphanum()
+            .min(1)
+            .max(60)
+            .required(),
+        
+        body: Joi
+            .string()
+            .min(1)
+            .max(200)
             .required()
-    })       
+    }),
 }

@@ -29,16 +29,15 @@ export const newsStore = defineStore('news', {
             return refNews;
         },
         
-        async updateNews(id, news) {
+        async updateNews(id, { title, body }) {
             const allNews = await fetch(`http://localhost:1337/api/news/patch/${id}`, {
                 method: 'PATCH',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(news)
+                body: JSON.stringify({ title, body })
             });
             const refNews = await allNews.json()
-            console.log(refNews);
             return refNews;
         },
         

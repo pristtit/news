@@ -34,6 +34,7 @@ export default {
 .search__news {
   display: flex;
   flex-grow: 100;
+  flex-wrap: wrap;
 }
 .account__control {
   display: flex;
