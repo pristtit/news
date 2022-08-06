@@ -1,66 +1,65 @@
 import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
-import Author from "../models/Token";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
+import bcrypt from 'bcryptjs';
+import authService from "../service/user-service"
+import { config } from "../config/config";
 
 
-const cretaeAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const { name } = req.body;
+const genetareAccesToken = (id: String) => {
+    const payload = {
+        id,
+    }
 
-    const author = new Author({
-        _id: new mongoose.Types.ObjectId(),
-        name
-    });
-
-    return author
-        .save()
-        .then((author) => res.status(201).json({ author }))
-        .catch((error) => res.status(500).json({ error }))
-};
-
-const readAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const authorId = req.params.authorId;
-
-    return Author.findById(authorId)
-        .then((author) => {
-            author ? res.status(200).json({ author }) : res.status(404).json({ message: 'NotFoound' })
-        })
-        .catch(error => res.status(500).json({ error }));
-};
-
-const readAll = (req: Request, res: Response, next: NextFunction) => {
-    return Author.find()
-        .then((authors) => res.status(200).json({ authors }))
-        .catch(error => res.status(500).json({ error }));
-};
-
-const updateAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const authorId = req.params.authorId;
-
-    return Author.findById(authorId)
-        .then((author) => {
-            if(author) {
-                author.set(req.body)
-
-                return author
-                .save()
-                .then((author) => res.status(201).json({ author }))
-                .catch((error) => res.status(500).json({ error }))
-            } else {
-                res.status(404).json({ message: 'NotFoound' })
+    return jwt.sign(payload, config.jwt.secretAccessKey, {expiresIn: "24h"})
+}
+class authController {
+    async registration(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userName, password } = req.body;
+            
+            const user = await User.findOne({ userName });
+            if (user) {
+                return res.status(400).json({ message: 'Пользователь с таким именем уже зарегестрирован' })
             }
-        })
-        .catch(error => res.status(500).json({ error }));
-};
 
-const deleteAuthor = (req: Request, res: Response, next: NextFunction) => {
-    const authorId = req.params.authorId;
+            await authService.registration(userName, password);
+            res.status(200).json('успешно');
+        } catch (error) {
+            res.status(400).json(error);
+        }
+    }
 
-    return Author.findByIdAndDelete(authorId)
-        .then((author) => (author ?
-            res.status(201).json({ message: 'deleted' }) :
-            res.status(404).json({ message: 'NotFound' })
-        ))
-        .catch((error) => res.status(500).json({ error }))
-};
+    async login(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { userName, password } = req.body;
+            const user = await User.findOne({ userName });
+            if (!user) {
+                return res.status(400).json({ message: 'Пользователь не зарегестрирован' })
+            }
 
-export default { cretaeAuthor, readAuthor, readAll, updateAuthor, deleteAuthor }
+            const validPassword = bcrypt.compareSync(password, user.password);
+            if (!validPassword) {
+                res.status(400).json({ message: 'Не верный пароль' })
+            }
+            const token = genetareAccesToken(user._id);
+            
+            res.cookie("token", token, { httpOnly: true });
+            res.status(200).json(true);
+        } catch (error) {
+            res.status(500).json('error');
+        }
+    }
+
+    async logout(req: Request, res: Response, next: NextFunction) {
+        try {
+            res.cookie("token", '', { httpOnly: true });
+            res.status(200).json(false);
+        } catch (error) {
+            res.status(500).json('error');
+        }
+    }
+}
+
+
+export default new authController();

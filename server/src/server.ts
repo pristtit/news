@@ -5,6 +5,7 @@ import { config } from "./config/config";
 import Loging from "./library/Loging";
 import newsRoutes from './routes/News';
 import userRoutes from './routes/User';
+import CookiePars from "cookie-parser";
 
 const router = express();
 
@@ -21,11 +22,11 @@ mongoose
 
 const startServer = () => {
     router.use((req, res, next) => {
-        Loging.info(`Outgoing -> Metod: [${req.method}] - URL: [${req.url}]` +
+        Loging.info(`Incoming -> Metod: [${req.method}] - URL: [${req.url}]` +
         `- IP: [${req.socket.remoteAddress}]`);
 
         res.on('finish', () => {
-            Loging.info(`Incoming -> Metod: [${req.method}] - URL: [${req.url}]` +
+            Loging.info(`Outgoing -> Metod: [${req.method}] - URL: [${req.url}]` +
             `- IP: [${req.socket.remoteAddress}] Status: [${res.statusCode}]`);
         })
 
@@ -34,9 +35,12 @@ const startServer = () => {
 
     router.use(express.urlencoded({extended: true}));
     router.use(express.json());
+    router.use(CookiePars());
+
 
     router.use((req, res, next) => {
-        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Origin', 'http://localhost:8080' );
+        res.header('Access-Control-Allow-Credentials', 'true');
         res.header('Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type,Accept, Authorization');
 
@@ -48,9 +52,8 @@ const startServer = () => {
         next();
     });
 
-
     router.use('/api/news', newsRoutes);
-    router.use('/api/user', userRoutes);
+    router.use('/api/users', userRoutes);
 
     router.use((req, res, next) => {
         const error = new Error('notFound');

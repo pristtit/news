@@ -1,8 +1,8 @@
 import Joi, { ObjectSchema } from "joi";
 import { NextFunction, Response, Request } from "express";
 import Loging from "../library/Loging";
-import { Schema } from "mongoose";
-import { IAuthor } from "../models/Token";
+import { IUser } from "../models/User";
+import { INews } from "../models/News";
 
 export const ValidateSchema = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -18,12 +18,33 @@ export const ValidateSchema = (schema: ObjectSchema) => {
 }
 
 export const Schemas = {
-    author: {
-        create: Joi.object<IAuthor>({
-            name: Joi.string().required()
-        }),
-        update: Joi.object<IAuthor>({
-            name: Joi.string().required()
-        })
-    }
+    user: Joi.object<IUser>({
+        userName: Joi
+            .string()
+            .alphanum()
+            .min(2)
+            .max(20)
+            .required(),
+        
+        password: Joi
+            .string()
+            .min(8)
+            .max(20)
+            .required(),
+    }),
+    
+    news: Joi.object<INews>({
+        title: Joi
+            .string()
+            .alphanum()
+            .min(1)
+            .max(60)
+            .required(),
+        
+        body: Joi
+            .string()
+            .min(1)
+            .max(200)
+            .required()
+    }),
 }
