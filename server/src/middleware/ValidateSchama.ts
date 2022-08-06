@@ -21,7 +21,6 @@ export const Schemas = {
     user: Joi.object<IUser>({
         userName: Joi
             .string()
-            .alphanum()
             .min(2)
             .max(20)
             .required(),
@@ -29,14 +28,13 @@ export const Schemas = {
         password: Joi
             .string()
             .min(8)
-            .max(20)
+            .max(30)
             .required(),
     }),
     
     news: Joi.object<INews>({
         title: Joi
             .string()
-            .alphanum()
             .min(1)
             .max(60)
             .required(),
