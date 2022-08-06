@@ -16,16 +16,17 @@
         </div>
         <h6>Id: {{ item?._id }}</h6>
         <div class="news-item_control-panel">
-            <button v-if="!edit" @click="deleteN">Удалить</button>
-            <button v-if="!edit" @click="edit = !edit">Изменить</button>
-            <button v-else @click="createN">Опубликовать</button>
+            <button v-if="!edit && isLogin" @click="deleteN">Удалить</button>
+            <button v-if="!edit && isLogin" @click="edit = !edit">Изменить</button>
+            <button v-if="edit && isLogin" @click="createN">Опубликовать</button>
         </div>
     </div>
 </template>
 
 <script>
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { newsStore } from '@/store/news'
+import { authStore } from '@/store/auth'
 
 export default {
 
@@ -40,6 +41,10 @@ export default {
         item: {
             type: Object,
         },
+    },
+
+    computed: {
+    ...mapState(authStore, ['isLogin']),
     },
 
     methods: {

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/registration', ValidateSchema(Schemas.user),authController.registration);
 router.post('/login',ValidateSchema(Schemas.user),  authController.login);
-router.post('/logout', );
+router.post('/logout', authController.logout);
 router.get('/refresh', );
 
 

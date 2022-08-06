@@ -31,23 +31,13 @@ export default {
 
     async request(username, password) {
       if (this.auth[this.currentType - 1].type === 'registration') {
-        try {
-          const res = await this.registration(username, password);
-          this.resMassge = res;
-          this.currentType = 0;
-        } catch (error) {
-          this.resMassge = error
-        }
+        
+        await this.registration(username, password);
+        this.currentType = 0;
+
        } else {
-        try {
-          const res = await this.login(username, password);
-          // localStorage.setItem('token', res.token);
-          console.log(res);
-          this.currentType = 0;
-        } catch (error) {
-          console.log(error);
-          this.resMassge = error
-        }
+        await this.login(username, password);
+        this.currentType = 0;
        }
     }
     },

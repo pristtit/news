@@ -23,6 +23,7 @@ export const newsStore = defineStore('news', {
                 headers: {
                   'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify(news)
             });
             const refNews = await allNews.json();
@@ -35,6 +36,7 @@ export const newsStore = defineStore('news', {
                 headers: {
                   'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({ title, body })
             });
             const refNews = await allNews.json()
@@ -44,6 +46,7 @@ export const newsStore = defineStore('news', {
         async deleteNews(id) {
             const allNews = await fetch(`http://localhost:1337/api/news/delete/${id}`, {
                 method: 'DELETE',
+                credentials: 'include',
             });
             const refNews = await allNews.json();
             return refNews;

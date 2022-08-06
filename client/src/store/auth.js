@@ -17,6 +17,7 @@ export const authStore = defineStore('auth', {
             }
         ],
         currentType: 0,
+        isLogin: JSON.parse(localStorage.getItem("isLogin")) || false
     }),
 
     actions: {
@@ -34,17 +35,33 @@ export const authStore = defineStore('auth', {
         },
         
         async login(userName, password) {
-            const tokenReq = await fetch('http://localhost:1337/api/users/login', {
+            const isLoginReq = await fetch('http://localhost:1337/api/users/login', {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
                 },
-                // credentials: 'include',
+                credentials: 'include',
                 body: JSON.stringify({ userName, password })
             });
-            console.log(tokenReq.headers);
-            const token = await tokenReq.json();
-            return token;
+
+            if (isLoginReq.ok) {
+                const isLogin = await isLoginReq.json();
+                localStorage.setItem('isLogin', JSON.stringify(isLogin));
+                this.isLogin = isLogin;
+            }
+        },
+        
+        async logout() {
+            const isLoginReq = await fetch('http://localhost:1337/api/users/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+
+            if (isLoginReq.ok) {
+                const isLogin = await isLoginReq.json();
+                localStorage.setItem('isLogin', JSON.stringify(isLogin));
+                this.isLogin = isLogin;
+            }
         },
     }
 })
